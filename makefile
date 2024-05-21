@@ -13,13 +13,13 @@ os-image: boot/boot_sect.bin kernel.bin
 	cat $^ > os-image	
 	
 kernel.bin: kernel/entry.o ${OBJ}
-	ld -o $@ -Ttext 0x1000 $^ --oformat binary
+	ld -m elf_i386 -o $@ -Ttext 0x1000 $^ --oformat binary
 
 %.o : %.c ${HEADERS}
-	gcc -ffreestanding -c $< -o $@
+	gcc -ffreestanding -c -m32 $< -o $@
 	
 %.o : %.asm
-	nasm $< -f elf64 -o $@
+	nasm $< -f elf32 -o $@
 %.bin : %.asm
 	nasm $< -f bin -I '../../16 bit /' -o $@
 clean :
